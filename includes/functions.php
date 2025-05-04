@@ -1,16 +1,15 @@
 <?php
-
 // Đảm bảo file được truy cập từ WordPress
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Include các file chức năng
-require_once plugin_dir_path( __FILE__ ) . 'admin/admin-menu.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/books.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/inventory.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/orders.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/suppliers.php';
+// Include các file chức năng - sửa đường dẫn
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/admin-menu.php';
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/books.php';
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/inventory.php';
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/orders.php';
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/suppliers.php';
 
 // Tạo bảng cơ sở dữ liệu khi plugin được kích hoạt
 function im_plugin_activate() {
@@ -133,13 +132,6 @@ function im_add_admin_notice( $message, $type = 'success' ) {
     </div>';
 }
 
-// Hàm xóa sách
-function im_delete_book( $book_id ) {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'books';
-    $wpdb->delete( $table_name, [ 'ID' => $book_id ], [ '%d' ] );
-}
-
 // Hàm tìm kiếm sách
 function im_search_books( $keyword ) {
     global $wpdb;
@@ -153,4 +145,3 @@ function im_search_books( $keyword ) {
         )
     );
 }
-

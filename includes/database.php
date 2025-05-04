@@ -11,6 +11,20 @@ function create_inventory_manager_tables() {
     $order_details_table = $wpdb->prefix . 'order_details';
     $suppliers_table = $wpdb->prefix . 'suppliers';
 
+    // Câu lệnh SQL tạo bảng 'suppliers' trước để có thể tham chiếu
+    $sql = "CREATE TABLE $suppliers_table (
+        ID INT NOT NULL AUTO_INCREMENT,
+        name VARCHAR(255) NOT NULL,
+        contact_name VARCHAR(255),
+        contact_email VARCHAR(255),
+        phone VARCHAR(20),
+        address TEXT,
+        PRIMARY KEY (ID)
+    );";
+    
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+
     // Câu lệnh SQL tạo bảng 'books'
     $sql = "CREATE TABLE $books_table (
         ID INT NOT NULL AUTO_INCREMENT,
@@ -24,8 +38,6 @@ function create_inventory_manager_tables() {
         FOREIGN KEY (supplier_id) REFERENCES {$wpdb->prefix}suppliers(ID) ON DELETE SET NULL
     );";
 
-    // Tạo bảng 'books' nếu chưa tồn tại
-    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
 
     // Câu lệnh SQL tạo bảng 'inventory' (quản lý kho)
@@ -61,19 +73,6 @@ function create_inventory_manager_tables() {
         PRIMARY KEY (ID),
         FOREIGN KEY (order_id) REFERENCES $orders_table(ID) ON DELETE CASCADE,
         FOREIGN KEY (book_id) REFERENCES $books_table(ID) ON DELETE CASCADE
-    );";
-    
-    dbDelta( $sql );
-
-    // Câu lệnh SQL tạo bảng 'suppliers' (nhà cung cấp)
-    $sql = "CREATE TABLE $suppliers_table (
-        ID INT NOT NULL AUTO_INCREMENT,
-        name VARCHAR(255) NOT NULL,
-        contact_name VARCHAR(255),
-        contact_email VARCHAR(255),
-        phone VARCHAR(20),
-        address TEXT,
-        PRIMARY KEY (ID)
     );";
     
     dbDelta( $sql );

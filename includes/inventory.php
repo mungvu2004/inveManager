@@ -79,3 +79,16 @@ function im_check_inventory( $book_id ) {
 
     return $inventory->quantity; // Trả về số lượng sách trong kho
 }
+function im_display_inventory_form( $inventory = null ) {
+    $quantity = is_object($inventory) ? esc_attr( $inventory->quantity ) : '';
+
+    echo '<form method="POST">
+        <table class="form-table">
+            <tr>
+                <th><label for="quantity">Số lượng trong kho</label></th>
+                <td><input type="number" id="quantity" name="quantity" value="' . $quantity . '" required /></td>
+            </tr>
+        </table>
+        <button type="submit" class="button button-primary">Lưu</button>
+    </form>';
+}
